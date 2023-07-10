@@ -1,10 +1,11 @@
 import { createStore } from 'vuex'
-import createPersistedState from 'vuex-persistedstate'
+import createPersistedState from "vuex-persistedstate";
 
-const store = createStore({
+export default createStore({
   state: {
     isGetterRouter: false,
-    isCollapsed: false
+    isCollapsed: false,
+    userInfo: {}
   },
   getters: {
   },
@@ -12,16 +13,29 @@ const store = createStore({
     changeGetterRouter(state, value) {
       state.isGetterRouter = value
     },
+    //控制侧边栏的展开
     changeCollapsed(state) {
       state.isCollapsed = !state.isCollapsed
+    },
+    changeUserInfo(state, value) {
+      state.userInfo = {
+        ...state.userInfo,
+        ...value
+      }
+    },
+    clearUserInfo(state, value) {
+      state.userInfo = {}
+    },
+    clearUserInfo(state, value){
+      state.userInfo = {}
     }
   },
   actions: {
   },
   modules: {
   },
-  // plugins: [createPersistedState({
-  //   paths:['isCollapsed'] //控制是否持久化
-  // })],
+  plugins: [createPersistedState({
+    paths: ["isCollapsed", "userInfo"] //控制是否持久化
+  })],
+
 })
-export default store

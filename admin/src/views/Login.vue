@@ -52,6 +52,10 @@
 import {reactive,ref} from 'vue'
 import {useRouter} from 'vue-router'
 import { loadFull } from "tsparticles";
+import { ElMessage } from 'element-plus'
+import axios from 'axios'
+import { useStore } from 'vuex';
+const store = useStore()
 
 
 const loginForm = reactive({
@@ -72,14 +76,20 @@ const loginRules = reactive({
 
 const router = useRouter()
 const submitForm = ()=>{
-    //1. 校验表单
     loginFormRef.value.validate((valid)=>{
         console.log(valid)
         if(valid){
-            console.log(loginForm)
-            localStorage.setItem("token", "kerwin");
-
-            router.push("/index")
+            // console.log(loginForm)
+            // localStorage.setItem("token", "kerwin");
+            axios.post('/adminapi/user/login',loginForm).then(res=>{
+              console.log(res.data);
+              if(res.data.ActionType === "OK"){
+                store.commit('changeUserInfo',res.data.data)
+                router.push("/index")
+              }else{
+                ElMessage.error('用户名和密码不匹配')
+              }
+            })
         }
     })
     //2. 拿到表单内容,提交后台
