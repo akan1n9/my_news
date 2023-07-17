@@ -1,18 +1,23 @@
-const UserService = require("../../services/admin/UserService");
-const JWT = require("../../util/JWT");
-
-
+const UserService = require("../../services/admin/UserService")
+const JWT = require("../../util/JWT")
+/*
+ * @作者: kerwin
+ * @公众号: 大前端私房菜
+ */
 const UserController = {
     login: async (req, res) => {
-        console.log(req.body);
+        // console.log(req.body)
+        //req.body 
         var result = await UserService.login(req.body)
 
         if (result.length === 0) {
             res.send({
-                code: '-1',
-                error: '用户名密码不匹配'
+                code: "-1",
+                error: "用户名密码不匹配"
             })
         } else {
+
+            //生成token
             const token = JWT.generate({
                 _id: result[0]._id,
                 username: result[0].username
@@ -28,9 +33,63 @@ const UserController = {
                     avatar: result[0].avatar,
                     role: result[0].role
                 }
-
             })
         }
+    },
+
+    upload: async (req, res) => {
+        // console.log(req.body,req.file)
+        const { username, introduction, gender } = req.body
+        const token = req.headers["authorization"].split(" ")[1]
+        const avatar = req.file ? `/avataruploads/${req.file.filename}` : ''
+        var payload = JWT.verify(token)
+        // console.log(payload._id)
+        //调用service 模块更新 数据
+
+        await UserService.upload({ _id: payload._id, username, introduction, gender: Number(gender), avatar })
+        if (avatar) {
+            res.send({
+                ActionType: "OK",
+                data: {
+                    username, introduction, gender: Number(gender), avatar
+                }
+            })
+        } else {
+            res.send({
+                ActionType: "OK",
+                data: {
+                    username, introduction, gender: Number(gender)
+                }
+            })
+        }
+
+    },
+    add: async (req, res) => {
+        const { username, introduction, gender, role, password } = req.body
+        const avatar = req.file ? `/avataruploads/${req.file.filename}` : ''
+        await UserService.add({ username, introduction, gender: Number(gender), avatar, role: Number(role), password })
+        res.send({
+            ActionType: 'OK',
+        })
+    },
+    getList: async (req, res) => {
+        const result = await UserService.getList(req.params)
+        res.send({
+            ActionType: "OK",
+            data: result
+        })
+    },
+    putList: async (req, res) => {
+        const result = await UserService.putList(req.body)
+        res.send({
+            ActionType: "OK"
+        })
+    },
+    delList: async (req, res) => {
+        const result = await UserService.delList({ _id: req.params.id })
+        res.send({
+            ActionType: "OK"
+        })
     }
 }
 

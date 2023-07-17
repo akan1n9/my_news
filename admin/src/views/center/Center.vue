@@ -49,22 +49,7 @@
             </el-form-item>
 
             <el-form-item label="头像" prop="avatar">
-              <el-upload
-                class="avatar-uploader"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :show-file-list="false"
-                :auto-upload="false"
-                :on-change="handleChange"
-              >
-                <img
-                  v-if="userForm.avatar"
-                  :src="userForm.avatar"
-                  class="avatar"
-                />
-                <el-icon v-else class="avatar-uploader-icon">
-                  <Plus />
-                </el-icon>
-              </el-upload>
+              <Upload :avatar="userForm.avatar" @roiechange="handleChange" />
             </el-form-item>
 
             <el-form-item>
@@ -80,15 +65,18 @@
 <script setup>
 import { useStore } from "vuex";
 import { computed, ref, reactive } from "vue";
-import { Plus } from "@element-plus/icons-vue";
-import axios from 'axios'
+import Upload from '../../components/upload/Upload.vue'
+import { ElMessage } from "element-plus";
+import upload from "@/util/upload";
 const store = useStore();
 
 const avatarUrl = computed(() =>
   store.state.userInfo.avatar
-    ? store.state.userInfo.avatar
+    ? "http://localhost:3000" + store.state.userInfo.avatar
     : `https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png`
 );
+
+
 
 const { username, gender, introduction, avatar } = store.state.userInfo;
 
@@ -98,7 +86,7 @@ const userForm = reactive({
   gender,
   introduction,
   avatar,
-  file:null
+  file: null,
 });
 
 const userFormRules = reactive({
@@ -123,30 +111,22 @@ const options = [
   },
 ];
 
-const handleChange = (file) => {
-  // console.log(file.raw);
-  userForm.avatar = URL.createObjectURL(file.raw);
-  userForm.file = file.raw;
+const handleChange = file => {
+  userForm.avatar = URL.createObjectURL(file);
+  userForm.file = file;
 };
 
 const submitForm = () => {
-  userFormRef.value.validate((valid)=>{
-    if(valid){
+  userFormRef.value.validate(async (valid) => {
+    if (valid) {
       // console.log('submit',userForm);
-      const params = new FormData()
-      for(let i in userForm){
-        params.append(i,userForm[i])
-      }
-
-      axios.post('/adminapi/user/upload',params,{
-        headers:{
-          'Content-Type':'multipart/form-data'
-        }
-      }).then(res=>{
-        console.log(res.data);
-      })
+      const res = await upload('/adminapi/user/upload', userForm)
+      if (res.ActionType === "OK") {
+            store.commit("changeUserInfo", res.data);
+            ElMessage.success("更新成功");
+          }
     }
-  })
+  });
 };
 </script>
 
@@ -158,29 +138,5 @@ const submitForm = () => {
   }
 }
 
-::v-deep .avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: var(--el-transition-duration-fast);
-}
 
-::v-deep .avatar-uploader .el-upload:hover {
-  border-color: var(--el-color-primary);
-}
-
-::v-deep .el-icon.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  text-align: center;
-}
-
-.avatar {
-  width: 178px;
-  height: 178px;
-}
 </style>

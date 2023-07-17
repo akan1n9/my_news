@@ -3,6 +3,7 @@ import Center from '../views/center/Center.vue'
 import UserAdd from '../views/user-manage/UserAdd.vue'
 import UserList from '../views/user-manage/UserList.vue'
 import NewsAdd from '../views/news-manage/NewsAdd.vue'
+import NewsEdit from '../views/news-manage/NewsEdit.vue'
 import NewsList from '../views/news-manage/NewsList.vue'
 import ProductAdd from '../views/product-manage/ProductAdd.vue'
 import ProductList from '../views/product-manage/ProductList.vue'
@@ -10,45 +11,51 @@ import NotFound from '../views/notfound/NotFound.vue'
 
 const routes = [
     {
-        path:'/index',
-        component:Home
+        path: '/index',
+        component: Home
     },
     {
-        path:'/center',
-        component:Center
+        path: '/center',
+        component: Center
     },
     {
-        path:'/user-manage/useradd',
-        component:UserAdd
+        path: '/user-manage/useradd',
+        component: UserAdd,
+        requireAdmin: true
     },
     {
-        path:'/user-manage/userlist',
-        component:UserList
+        path: '/user-manage/userlist',
+        component: UserList,
+        requireAdmin: true
     },
     {
-        path:'/news-manage/newsadd',
-        component:NewsAdd
+        path: '/news-manage/newsadd',
+        component: NewsAdd
     },
     {
-        path:'/news-manage/newslist',
-        component:NewsList
+        path: "/news-manage/editnews/:id",
+        component: NewsEdit
     },
     {
-        path:'/product-manage/productadd',
-        component:ProductAdd
+        path: '/news-manage/newslist',
+        component: NewsList
     },
     {
-        path:'/product-manage/productlist',
-        component:ProductList
+        path: '/product-manage/productadd',
+        component: ProductAdd
     },
     {
-        path:'/',
-        redirect:'/index'
+        path: '/product-manage/productlist',
+        component: ProductList
     },
     {
-        path:'/:pathMatch(.*)*',
-        name:'Notfound',
-        component:NotFound
+        path: '/',
+        redirect: '/index'
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'Notfound',
+        component: NotFound
     }
 ]
 

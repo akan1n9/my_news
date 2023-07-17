@@ -9,7 +9,7 @@ const JWT = {
     verify(token) {
         try {
             return jsonwebtoken.verify(token, secret)
-        } catch (error) {
+        } catch (e) {
             return false
         }
     }

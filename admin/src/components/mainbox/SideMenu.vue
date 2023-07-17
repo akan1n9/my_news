@@ -1,9 +1,11 @@
 <template>
-  <el-aside :width="$store.state.isCollapsed?'64px':'200px'">
-    <el-menu :collapse="$store.state.isCollapsed"
-    :collapse-transition="false"
-    :router="true"
-    :default-active="route.fullPath">
+  <el-aside :width="$store.state.isCollapsed ? '64px' : '200px'">
+    <el-menu
+      :collapse="$store.state.isCollapsed"
+      :collapse-transition="false"
+      :router="true"
+      :default-active="route.fullPath"
+    >
       <el-menu-item index="/index">
         <el-icon><home-filled /></el-icon>
         <span>首页</span>
@@ -16,7 +18,7 @@
         <span>个人中心</span>
       </el-menu-item>
 
-      <el-sub-menu index="/user-manage">
+      <el-sub-menu index="/user-manage" v-admin>
         <template #title>
           <el-icon>
             <user-filled />
@@ -55,15 +57,33 @@
 </template>
 
 <script setup>
-import {HomeFilled,Avatar,UserFilled,MessageBox,Reading,Pointer} from '@element-plus/icons-vue'
-import {useRoute} from 'vue-router'
-const route = useRoute()
+import store from "@/store";
+import {
+  HomeFilled,
+  Avatar,
+  UserFilled,
+  MessageBox,
+  Reading,
+  Pointer,
+} from "@element-plus/icons-vue";
+import { useRoute } from "vue-router";
+import { useStore } from "vuex";
+
+const route = useRoute();
+
+const vAdmin = {
+  mounted(el) {
+    if (store.state.userInfo.role !== 1) {
+      el.parentNode.removeChild(el)
+    }
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 .el-aside {
   height: 100vh;
-  .el-menu{
+  .el-menu {
     height: 100vh;
   }
 }
