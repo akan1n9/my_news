@@ -4,10 +4,10 @@ const NewsController = {
     add: async (req, res) => {
         // console.log(req.file,req.body)
         const cover = req.file ? `/newsuploads/${req.file.filename}` : ""
-        const { title, content, category, isPublish } = req.body
+        const { title, content, category, isPublish, writer } = req.body
         //调用 service进行添加
         await NewsService.add({
-            title, content,
+            title, content, writer,
             category: Number(category)
             ,
             isPublish: Number(isPublish),
@@ -19,7 +19,8 @@ const NewsController = {
         })
     },
     getList: async (req, res) => {
-        const result = await NewsService.getList({ _id: req.params.id })
+        const result = await NewsService.getList({ _id: req.params.id, writer: req.params.writer })
+        console.log(result);
         res.send({
             ActionType: "OK",
             data: result

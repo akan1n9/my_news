@@ -69,13 +69,14 @@ const loginRules = reactive({
 
 const router = useRouter();
 const submitForm = () => {
+  
   loginFormRef.value.validate((valid) => {
     console.log(valid);
     if (valid) {
       // console.log(loginForm)
       // localStorage.setItem("token", "kerwin");
       axios.post("/adminapi/user/login", loginForm).then((res) => {
-        console.log(res.data);
+        console.log(res);
         if (res.data.ActionType === "OK") {
           store.commit("changeUserInfo", res.data.data);
           store.commit("changeGetterRouter", false);

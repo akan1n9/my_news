@@ -112,6 +112,7 @@ const options = [
 ];
 
 const handleChange = file => {
+  // console.log(file);
   userForm.avatar = URL.createObjectURL(file);
   userForm.file = file;
 };
@@ -119,7 +120,7 @@ const handleChange = file => {
 const submitForm = () => {
   userFormRef.value.validate(async (valid) => {
     if (valid) {
-      // console.log('submit',userForm);
+      console.log('submit',userForm);
       const res = await upload('/adminapi/user/upload', userForm)
       if (res.ActionType === "OK") {
             store.commit("changeUserInfo", res.data);

@@ -58,7 +58,7 @@
       </el-table>
     </el-card>
 
-    <el-dialog v-model="dialogVisible" title="编辑用户" width="50%">
+    <el-dialog v-model="dialogVisible" title="预览新闻" width="50%">
       <h2>{{ previewData.title }}</h2>
       <div style="font-size: 12px; color: gray">
         {{ formatTime.getTime(previewData.editTime) }}
@@ -80,9 +80,11 @@ import formatTime from "@/util/formatTime";
 import { Star, Edit, Delete, StarFilled } from "@element-plus/icons-vue";
 import { useRoute } from "vue-router";
 import { useRouter } from "vue-router";
-const router = useRouter()
-const route = useRoute()
-
+import { useStore } from "vuex";
+const router = useRouter();
+const route = useRoute();
+const store = useStore();
+const writer = store.state.userInfo.username;
 const tableData = ref([]);
 const previewData = ref({});
 const dialogVisible = ref(false);
@@ -91,8 +93,11 @@ onMounted(() => {
 });
 
 const getTableData = async () => {
-  const res = await axios.get("/adminapi/news/list");
-  console.log(res.data.data);
+  // console.log(writer);
+
+  const res = await axios.get(`/adminapi/news/list/${writer}`);
+  //  const res = await axios.get(`/adminapi/news/list`);
+  console.log(res);
   tableData.value = res.data.data;
 };
 
@@ -111,6 +116,7 @@ const handleSwitchChange = async (item) => {
 };
 
 const handlePreview = (data) => {
+  // console.log(data);
   previewData.value = data;
   dialogVisible.value = true;
 };
@@ -120,9 +126,10 @@ const handleDelete = async (item) => {
   await getTableData();
 };
 
-const handleEdit = item => {
-  router.push(`/news-manage/editnews/${item._id}`)
-}
+const handleEdit = (item) => {
+  console.log(item);
+  router.push(`/news-manage/editnews/${item._id}`);
+};
 </script>
 
 <style lang="scss" scoped>

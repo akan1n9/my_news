@@ -41,6 +41,7 @@ const UserController = {
         // console.log(req.body,req.file)
         const { username, introduction, gender } = req.body
         const token = req.headers["authorization"].split(" ")[1]
+        // 通过req.file拿到文件信息
         const avatar = req.file ? `/avataruploads/${req.file.filename}` : ''
         var payload = JWT.verify(token)
         // console.log(payload._id)

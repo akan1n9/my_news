@@ -14,7 +14,7 @@
       </el-form-item>
 
       <el-form-item label="内容" prop="content">
-        <editor @event="handleChange" :content="newsForm.content" v-if="newsForm.content" />
+        <editor @event="handleChange" :content="newsForm.content" v-if="showEditor" />
       </el-form-item>
 
       <el-form-item label="类别" prop="category">
@@ -51,6 +51,9 @@ import Upload from "@/components/upload/Upload";
 import upload from "@/util/upload";
 import { useRouter, useRoute } from "vue-router";
 import axios from "axios";
+
+const showEditor = ref(false)
+
 const router = useRouter();
 const route = useRoute();
 const newsFormRef = ref();
@@ -114,9 +117,12 @@ onMounted(async () => {
   // console.log(route.params.id)
 
   const res = await axios.get(`/adminapi/news/list/${route.params.id}`);
-  console.log(res.data.data[0]);
-
-  Object.assign(newsForm, res.data.data[0]);
+  // console.log(res.data.data[0]);
+  if(res.data.data.length > 0){
+    Object.assign(newsForm, res.data.data[0]);
+    showEditor.value =true
+  }
+  
 });
 </script>
 

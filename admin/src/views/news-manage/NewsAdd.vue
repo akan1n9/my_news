@@ -48,9 +48,11 @@
 import { computed, ref, reactive } from "vue";
 import Editor from "@/components/editor/Editor";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 import Upload from "@/components/upload/Upload";
 import upload from "@/util/upload";
 const router = useRouter();
+const store = useStore();
 
 const newsFormRef = ref();
 const newsForm = reactive({
@@ -60,7 +62,7 @@ const newsForm = reactive({
   cover: "",
   file: null,
   isPublish: 0,
-  author:''
+  writer: "",
 });
 
 const newsFormRules = reactive({
@@ -95,13 +97,15 @@ const handleUploadChange = (file) => {
 };
 
 const submitForm = () => {
+  // console.log(store.state.userInfo.username);
+  newsForm.writer = store.state.userInfo.username;
   newsFormRef.value.validate(async (valid) => {
     if (valid) {
-      // console.log(newsForm);
+      console.log(newsForm);
       //后台通信,
-      await upload('adminapi/news/add', newsForm)
+      await upload("adminapi/news/add", newsForm);
 
-      router.push(`/news-manage/newslist`)
+      router.push(`/news-manage/newslist`);
     }
   });
 };
