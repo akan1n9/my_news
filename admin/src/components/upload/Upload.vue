@@ -25,6 +25,7 @@ const props = defineProps({
 const emit = defineEmits(["roiechange"]);
 
 const handleChange = file => {
+  console.log(file);
   emit("roiechange", file.raw);
 };
 

@@ -50,6 +50,7 @@ const router = useRouter();
 const currentNews = ref({});
 const topNews = ref({});
 
+// watchEffect函数接受一个函数作为参数，并在该函数内部访问响应式数据。当响应式数据发生变化时，Vue会自动追踪哪些数据被访问，并在这些数据发生变化时重新运行函数。
 const stop = watchEffect(async () => {
   //   console.log(route);
   if(!route.params.id)return

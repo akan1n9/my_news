@@ -86,6 +86,7 @@ const options = [
 ];
 
 const handleChange = (file) => {
+  console.log(file);
   userForm.avatar = URL.createObjectURL(file);
   userForm.file = file;
 };
