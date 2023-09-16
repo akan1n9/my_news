@@ -4,8 +4,6 @@ import MainBox from '../views/MainBox.vue'
 import RoutesConfig from './config.js'
 import store from '../store/index'
 
-
-
 const routes = [
   {
     path: '/login',
@@ -34,7 +32,6 @@ router.beforeEach((to, from, next) => {
       })
     } else {
       if (!store.state.isGetterRouter) {
-
         router.removeRoute('mainbox')
         ConfigRouter()
         next({
@@ -44,12 +41,10 @@ router.beforeEach((to, from, next) => {
         next()
       }
     }
-
   }
 })
 
 const ConfigRouter = () => {
-
   if (!router.hasRoute('mainbox')) {
     router.addRoute({
       path: '/mainbox',
@@ -62,7 +57,7 @@ const ConfigRouter = () => {
   })
   store.commit('changeGetterRouter', true)
 }
-
+//判断权限字段的方法
 const checkPermission = (item) => {
   if (item.requireAdmin) {
     return store.state.userInfo.role === 1

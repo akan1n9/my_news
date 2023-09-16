@@ -18,6 +18,4 @@ const JWT = {
     //jsonwebtoken.verify函数用于验证一个已经签名的token的有效性.如果通过验证，会返回token中包含的数据信息。如果验证失败，会抛出一个异常。
 
 }
-
-
 module.exports = JWT

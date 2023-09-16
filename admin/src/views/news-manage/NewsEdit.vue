@@ -114,10 +114,10 @@ const handleBack = () => {
 };
 
 onMounted(async () => {
-  // console.log(route.params.id)
+  // console.log(route.params)
 
-  const res = await axios.get(`/adminapi/news/list/${route.params.id}`);
-  // console.log(res.data.data[0]);
+  const res = await axios.get(`/adminapi/news/list/1${route.params.id}`);
+  console.log(res);
   if(res.data.data.length > 0){
     Object.assign(newsForm, res.data.data[0]);
     showEditor.value =true

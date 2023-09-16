@@ -97,7 +97,7 @@ const getTableData = async () => {
 
   const res = await axios.get(`/adminapi/news/list/${writer}`);
   //  const res = await axios.get(`/adminapi/news/list`);
-  console.log(res);
+  // console.log(res);
   tableData.value = res.data.data;
 };
 
@@ -127,7 +127,7 @@ const handleDelete = async (item) => {
 };
 
 const handleEdit = (item) => {
-  console.log(item);
+  // console.log(item._id);
   router.push(`/news-manage/editnews/${item._id}`);
 };
 </script>

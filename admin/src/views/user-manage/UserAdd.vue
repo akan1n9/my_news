@@ -53,7 +53,7 @@ import { computed, ref, reactive } from "vue";
 import Upload from "@/components/upload/Upload";
 import upload from "@/util/upload";
 import { useRouter } from "vue-router";
-const router = useRouter()
+const router = useRouter();
 
 const userFormRef = ref();
 const userForm = reactive({
@@ -63,7 +63,7 @@ const userForm = reactive({
   introduction: "",
   avatar: "",
   file: null,
-  gender:0
+  gender: 0,
 });
 
 const userFormRules = reactive({
@@ -92,13 +92,15 @@ const handleChange = (file) => {
 };
 
 const submitForm = () => {
+  // console.log(userFormRef);
+  // console.log(userFormRef.value);
   userFormRef.value.validate(async (valid) => {
     if (valid) {
       //提交数据到后端
       // console.log(userForm);
-      await upload('adminapi/user/add', userForm)
+      await upload("adminapi/user/add", userForm);
 
-      router.push(`/user-manage/userlist`)
+      router.push(`/user-manage/userlist`);
     }
   });
 };
